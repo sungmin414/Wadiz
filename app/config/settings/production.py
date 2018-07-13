@@ -2,10 +2,10 @@ from .base import *
 # secrets = json.loads(open(os.path.join(SECRETS_DIR, 'dev.json')).read())
 secrets = json.load(open(os.path.join(SECRETS_DIR, 'dev.json')))
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
-    'localhost',
+    'fc-8th-eb-docker-deploy.ap-northeast-2.elasticbeanstalk.com',
 ]
 
 # WSGI
