@@ -2,7 +2,7 @@ from .base import *
 # secrets = json.loads(open(os.path.join(SECRETS_DIR, 'dev.json')).read())
 secrets = json.load(open(os.path.join(SECRETS_DIR, 'dev.json')))
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'fc-8th-eb-docker-deploy.ap-northeast-2.elasticbeanstalk.com',
