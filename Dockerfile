@@ -7,7 +7,7 @@ RUN             apt -y update && apt -y dist-upgrade
 RUN             apt -y install build-essential
 RUN             apt -y install nginx supervisor
 
-
+#
 
 # 로컬의 requirement.txt 파이을 /srv 에 복사 후 pip install 실행
 # (build 하는 한경에 requirements.txt 가 있어야 함)
