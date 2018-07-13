@@ -9,7 +9,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(ROOT_DIR, '.media')
 
 # WSGI
-# WSGI_APPLICATION = 'config.wsgi.local.application'
+WSGI_APPLICATION = 'config.wsgi.local.application'
 
 # DB
 DATABASES = {

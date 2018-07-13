@@ -24,9 +24,6 @@ SECRET_KEY = secrets['SECRET_KEY']
 
 
 AUTH_USER_MODEL = 'members.User'
-print(ROOT_DIR)
-print(SECRETS_DIR)
-# print(SECRET_KEY)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/

@@ -5,8 +5,15 @@ name = "pypi"
 
 [packages]
 django = "*"
+argparse = "*"
+uwsgi = "*"
+django-storages = "*"
+"psycopg2-binary" = "*"
 
 [dev-packages]
+awsebcli = "*"
+ipython = "*"
+django-extensions = "*"
 
 [requires]
 python_version = "3.6"
