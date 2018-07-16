@@ -4,21 +4,31 @@ import sys
 secrets = json.load(open(os.path.join(SECRETS_DIR, 'production.json')))
 
 # Django 가 Runserver 인지 확인
-RUNSERVER = sys.argv[1] == 'runserver'
+RUNSERVER = 'runserver' in sys.argv
 DEBUG = False
 
 ALLOWED_HOSTS = secrets['ALLOWED_HOSTS']
 
 if RUNSERVER:
+    DEBUG = True
     ALLOWED_HOSTS = [
         'localhost',
         '127.0.0.1',
     ]
 
+# WSGI
+WSGI_APPLICATION = 'config.wsgi.production.application'
+
 # django storages settings
 INSTALLED_APPS += [
     'storages',
 ]
+
+# DB
+DATABASES = secrets['DATABASES']
+
+# Media
+DEFAULT_FILE_STORAGE = 'config.storages.S3DefaultStorage'
 
 # AWS Settings
 AWS_ACCESS_KEY_ID = secrets['AWS_ACCESS_KEY_ID']
@@ -26,13 +36,6 @@ AWS_SECRET_ACCESS_KEY = secrets['AWS_SECRET_ACCESS_KEY']
 AWS_DEFAULT_ACL = secrets['AWS_DEFAULT_ACL']
 AWS_S3_REGION_NAME = secrets['AWS_S3_REGION_NAME']
 AWS_S3_SIGNATURE_VERSION = secrets['AWS_S3_SIGNATURE_VERSION']
-
-
-# WSGI
-WSGI_APPLICATION = 'config.wsgi.production.application'
-
-# DB
-DATABASES = secrets['DATABASES']
 
 
 # Debug

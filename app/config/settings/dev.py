@@ -9,10 +9,6 @@ INSTALLED_APPS += [
     'storages',
 ]
 
-
-print('현재 static 경로: ', MEDIA_ROOT)
-print('현재 static URL: ', MEDIA_URL)
-
 # Media
 DEFAULT_FILE_STORAGE = 'config.storages.S3DefaultStorage'
 

@@ -26,8 +26,3 @@ urlpatterns = [
     prefix=settings.MEDIA_URL,
     document_root=settings.MEDIA_ROOT,
 )
-
-# + static(
-#     prefix=settings.MEDIA_URL,
-#     document_root=settings.MEDIA_ROOT,
-# )
