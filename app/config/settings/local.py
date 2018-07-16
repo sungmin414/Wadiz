@@ -2,12 +2,6 @@ from .base import *
 
 DEBUG = True
 
-# Static
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(ROOT_DIR, '.static')
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(ROOT_DIR, '.media')
-
 ALLOWED_HOSTS = [
     'sad'
 ]
@@ -22,6 +16,10 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+# Media
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(ROOT_DIR, '.media')
 
 
 LOG_DIR = os.path.join(ROOT_DIR, '.log')

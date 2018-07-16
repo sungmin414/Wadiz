@@ -1,25 +1,47 @@
 from .base import *
+import sys
 # secrets = json.loads(open(os.path.join(SECRETS_DIR, 'dev.json')).read())
 secrets = json.load(open(os.path.join(SECRETS_DIR, 'production.json')))
 
+# Django 가 Runserver 인지 확인
+RUNSERVER = sys.argv[1] == 'runserver'
 DEBUG = False
 
 ALLOWED_HOSTS = secrets['ALLOWED_HOSTS']
+
+if RUNSERVER:
+    ALLOWED_HOSTS = [
+        'localhost',
+        '127.0.0.1',
+    ]
+
+# django storages settings
+INSTALLED_APPS += [
+    'storages',
+]
+
+# AWS Settings
+AWS_ACCESS_KEY_ID = secrets['AWS_ACCESS_KEY_ID']
+AWS_SECRET_ACCESS_KEY = secrets['AWS_SECRET_ACCESS_KEY']
+AWS_DEFAULT_ACL = secrets['AWS_DEFAULT_ACL']
+AWS_S3_REGION_NAME = secrets['AWS_S3_REGION_NAME']
+AWS_S3_SIGNATURE_VERSION = secrets['AWS_S3_SIGNATURE_VERSION']
+
+
 # WSGI
 WSGI_APPLICATION = 'config.wsgi.production.application'
 
 # DB
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+DATABASES = secrets['DATABASES']
 
-# Static
-STATIC_URL = '/static/'
 
+# Debug
 LOG_DIR = '/var/log/django'
+
+if not os.path.exists(LOG_DIR):
+    LOG_DIR = os.path.join(ROOT_DIR, '.log')
+    os.makedirs(LOG_DIR, exist_ok=True)
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

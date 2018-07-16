@@ -13,29 +13,39 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 import os
 import json
 
+DEBUG = True
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 ROOT_DIR = os.path.dirname(BASE_DIR)
 
 SECRETS_DIR = os.path.join(ROOT_DIR, '.secrets')
 
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+
+TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
+
+# Static [root 폴더를 삼음]
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(ROOT_DIR, '.static')
+
+# Media
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(ROOT_DIR, '.media')
+
+# AWS Settings
+
+
+# STATIC
+STATICFILES_DIRS = [
+    STATIC_DIR,
+]
+
 secrets = json.loads(open(os.path.join(SECRETS_DIR, 'base.json')).read())
 SECRET_KEY = secrets['SECRET_KEY']
 
 
 AUTH_USER_MODEL = 'members.User'
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'n(rn-n7@he8%n*o(*__bn$7l%hcrrvfm=!xiax^p67n33)ybil'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -64,7 +74,9 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            TEMPLATES_DIR
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -127,4 +139,4 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
-STATIC_URL = '/static/'
+# STATIC_URL = '/static/'
