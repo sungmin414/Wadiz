@@ -25,6 +25,8 @@ STATIC_DIR = os.path.join(BASE_DIR, 'static')
 
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 
+secrets = json.load(open(os.path.join(SECRETS_DIR, 'base.json')))
+
 # Static [root 폴더를 삼음]
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(ROOT_DIR, '.static')
@@ -34,6 +36,12 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(ROOT_DIR, '.media')
 
 # AWS Settings
+AWS_ACCESS_KEY_ID = secrets['AWS_ACCESS_KEY_ID']
+AWS_SECRET_ACCESS_KEY = secrets['AWS_SECRET_ACCESS_KEY']
+AWS_DEFAULT_ACL = secrets['AWS_DEFAULT_ACL']
+AWS_S3_REGION_NAME = secrets['AWS_S3_REGION_NAME']
+AWS_S3_SIGNATURE_VERSION = secrets['AWS_S3_SIGNATURE_VERSION']
+
 
 
 # STATIC
@@ -44,8 +52,14 @@ STATICFILES_DIRS = [
 secrets = json.loads(open(os.path.join(SECRETS_DIR, 'base.json')).read())
 SECRET_KEY = secrets['SECRET_KEY']
 
-
+# Auth
+ADMIN_USERNAME = 'admin'
+ADMIN_PASSWORD = 'pbkdf2_sha256$100000$v7w9v0l0qIlg$74DJd7Up9dfyuFYzxyi/Hh49G3ge4ge0lzBNS2r9Nu8='
 AUTH_USER_MODEL = 'members.User'
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'members.backends.SettingsBackend',
+]
 
 # Application definition
 
