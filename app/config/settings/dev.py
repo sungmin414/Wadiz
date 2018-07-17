@@ -7,6 +7,7 @@ DEBUG = True
 # django storages settings
 INSTALLED_APPS += [
     'storages',
+    'django_extensions'
 ]
 
 # Media
