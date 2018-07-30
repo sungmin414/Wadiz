@@ -34,7 +34,7 @@ def login_view(request):
             if next:
                 return redirect(next)
 
-            return redirect('posts:post-list')
+            return redirect('index')
 
         else:
             print('실패')

@@ -1,14 +1,32 @@
-{% extends 'base.html' %}
+{% block header %}
 
-{% block content %}
-
-    <div class="row">
-            <div class="col-md-5">
-                <a class="layout-center layout-title" href="{% url 'index' %}">
-                    {% load static %}
-                    <img class="rounded-circle float-left" style="width:50px; height:50px;" src="{% static 'images/logo.jpg' %}" alt="">
-                    Instagram
-                </a>
-            </div>
+<header class="wz-header">
+    <div class="header-wrap">
+        <div class="home-logo ml-3">
+            <a href="{% url 'index' %}">wadiz</a>
+        </div>
+        <ul style="list-style:none; display: inline-block;">
+            <li class="menu mr-2"><a href="">투자</a></li>
+            <li class="menu mr-2"><a href="">리워드</a></li>
+            <li class="menu mr-2"><a href="">캐스트</a></li>
+            <li class="menu mr-2"><a href="">...</a></li>
+        </ul>
     </div>
+    {% if user.is_authenticated %}
+    <div class="log-out">
+
+        <form action="{% url 'members:logout' %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success">로그아웃</button>
+        </form>
+
+    </div>
+
+    {% else %}
+    <div class="layout-header">
+        <a class="btn btn-primary" href="{% url 'members:login' %}">로그인</a>
+        <a class="btn btn-primary" href="{% url 'members:signup2' %}">회원가입</a>
+    </div>
+    {% endif %}
+</header>
 {% endblock %}

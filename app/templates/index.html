@@ -42,26 +42,27 @@
         }
 
 
+
     </style>
 </head>
 <body>
-<header class="wz-header">
-    <div class="header-wrap">
-        <div class="home-logo ml-3">
-            <a href="">wadiz</a>
-        </div>
-        <ul style="list-style:none; display: inline-block;">
-            <li class="menu mr-2"><a href="">투자</a></li>
-            <li class="menu mr-2"><a href="">리워드</a></li>
-            <li class="menu mr-2"><a href="">캐스트</a></li>
-            <li class="menu mr-2"><a href="">...</a></li>
-        </ul>
-    </div>
-</header>
+
+{% block header %}
+{% include 'include/posts/header.html' %}
+{% endblock %}
+
+
 <div class="container">
     <div class="img-container row justify-content-center">
         <div class="col-md-10 col-log-8 mt-3">
-            <img class="img-fluid rounded" src="{% static 'images/bby.jpg' %}" alt="">
+
+
+            {% if user.is_authenticated %}
+                {{user}} 로그인중
+            {% else %}
+            {% block content %}
+            {% endblock %}
+            {% endif %}
         </div>
     </div>
 </div>
