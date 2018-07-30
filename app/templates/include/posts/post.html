@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="card col-sm-12 post-layout">
+        <div class="card-body">
+            <div class="row post-header">
+                {% if post.author.img_profile %}
+                <img class="rounded-circle float-left" style="width:50px; height:50px;" src="{{ post.author.img_profile.url }}" alt="">
+
+                {% else %}
+                {% load static %}
+                <img class="rounded-circle float-left" style="width:50px; height:50px;" src="{% static 'images/blank_user.jpg' %}" alt="">
+                {% endif %}
+                <h3 class="card-title layout-user-name">{{post.author.username}}</h3>
+                <form action="" method="POST" class="follow-btn">
+                {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-primary ml-10">+follow</button>
+                </form>
+
+                <form action="{% url 'posts:post-like' post.pk %}" method="POST" class="follow-btn">
+                {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-primary ml-10">Like</button>
+                </form>
+                <div class="follow-btn layout-post-like">
+
+
+
+                </div>
+            </div>
+
+
+            {% if post.photo %}
+            <div class="row">
+                <div class="col-sm-12">
+                    <div>
+                        <a href="{% url 'posts:post-detail' pk=post.id %}">
+                            <img class="rounded mx-auto d-block" src="{{post.photo.url}}" alt="">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div> <!--card body-->
+    </div>
+{% endblock %}
