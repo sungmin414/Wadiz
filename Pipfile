@@ -11,6 +11,7 @@ django-storages = "*"
 "psycopg2-binary" = "*"
 pillow = "*"
 "boto3" = "*"
+django-rest-framework = "*"
 
 [dev-packages]
 awsebcli = "*"

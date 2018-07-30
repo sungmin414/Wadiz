@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form action="" method="POST" id="form1">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="username">username :</label>
+        <input type="text" id="username" name="username">
+    </div>
+
+    <div class="form-group">
+        <label for="password">password :</label>
+        <input type="text" id="password" name="password">
+    </div>
+
+    <button class="btn btn-primary" type="submit" form="form1" value="Submit">로그인</button>
+
+        <a href="https://www.facebook.com/v3.0/dialog/oauth?
+                client_id=192070051480669
+                &redirect_uri=http://localhost:8000/members/facebook-login/">face book 로그인</a>
+</form>
+
+{% endblock %}

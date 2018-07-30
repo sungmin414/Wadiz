@@ -43,7 +43,6 @@ AWS_S3_REGION_NAME = secrets['AWS_S3_REGION_NAME']
 AWS_S3_SIGNATURE_VERSION = secrets['AWS_S3_SIGNATURE_VERSION']
 
 
-
 # STATIC
 STATICFILES_DIRS = [
     STATIC_DIR,
@@ -65,6 +64,7 @@ AUTHENTICATION_BACKENDS = [
 
 INSTALLED_APPS = [
     'members',
+    # 'rest_framework,',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

@@ -1,18 +1,6 @@
-FROM            python:3.6.5-slim
+FROM            ryanden/fc-8th-eb-docker:base
 
 MAINTAINER      lockstom2@gmail.com
-
-# uwsgi는 Pipfile에 기록
-RUN             apt -y update && apt -y dist-upgrade
-RUN             apt -y install build-essential
-RUN             apt -y install nginx supervisor
-
-#
-
-# 로컬의 requirement.txt 파이을 /srv 에 복사 후 pip install 실행
-# (build 하는 한경에 requirements.txt 가 있어야 함)
-COPY            ./requirements.txt  /srv/
-RUN             pip install -r /srv/requirements.txt
 
 ENV             PROJECT_DIR             /srv/project
 ENV             BUILD_MODE              production
@@ -20,9 +8,6 @@ ENV             DJANGO_SETTINGS_MODULE  config.settings.${BUILD_MODE}
 
 COPY            .   ${PROJECT_DIR}
 RUN             mkdir   /var/log/django
-#WORKDIR         ${PROJECT_DIR}
-
-
 
 # Nginx 설정파일들 복사 미 enabled로 링크
                 # avaiable에 있는 파일 복사

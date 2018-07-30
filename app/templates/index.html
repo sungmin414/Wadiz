@@ -8,22 +8,62 @@
     <title>EB-Deploy</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+
+    <style>
+
+        ul {
+            margin-bottom: 0;
+        }
+
+        body {
+            line-height: 1.5em;
+            letter-spacing: -.02em;
+            color: rgba(0,0,0,.84);
+            font-size: 15px;
+        }
+
+        .active{
+            color: #00bf99;
+        }
+
+        .menu {
+            display: inline-block;
+            height: 100%;
+            line-height: 56px;
+            color: #44484b;
+            font-weight: 700;
+            font-size: 17px;
+        }
+
+        .home-logo {
+            font-size: 2rem;
+            display: inline-block;
+            height: 100%;
+        }
+
+
+    </style>
 </head>
 <body>
-    <nav class="navebar navbar-expand naveber-light bg-light">
-        <div class="container" style="height: 50px;">
-            <div><a style="float:left;" href="" class="navbar-brand">EB Deploy</a></div>
-            <div><a style="float:left;" href="" class="navbar-brand">EB Deploy</a></div>
-            <div><a style="float:left;" href="" class="navbar-brand">EB Deploy</a></div>
-
+<header class="wz-header">
+    <div class="header-wrap">
+        <div class="home-logo ml-3">
+            <a href="">wadiz</a>
         </div>
-        <div class="container">
-            <div class="img-container row justify-content-center">
-                <div class="col-md-10 col-log-8 mt-3">
-                    <img class="img-fluid rounded" src="{% static 'images/bby.jpg' %}" alt="">
-                </div>
-            </div>
+        <ul style="list-style:none; display: inline-block;">
+            <li class="menu mr-2"><a href="">투자</a></li>
+            <li class="menu mr-2"><a href="">리워드</a></li>
+            <li class="menu mr-2"><a href="">캐스트</a></li>
+            <li class="menu mr-2"><a href="">...</a></li>
+        </ul>
+    </div>
+</header>
+<div class="container">
+    <div class="img-container row justify-content-center">
+        <div class="col-md-10 col-log-8 mt-3">
+            <img class="img-fluid rounded" src="{% static 'images/bby.jpg' %}" alt="">
         </div>
-    </nav>
+    </div>
+</div>
 </body>
 </html>
