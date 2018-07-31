@@ -11,6 +11,10 @@
 
     <style>
 
+        li,ul,ol{
+            list-style:none;
+        }
+
         ul {
             margin-bottom: 0;
         }
@@ -40,7 +44,16 @@
             display: inline-block;
             height: 100%;
         }
+        .layout-header{
+            float:right;
+            padding-right:16px;
+        }
 
+        .layout-header > li{
+            float:left;
+            padding-left:8px;
+            padding-top:8px;
+        }
 
 
     </style>
@@ -53,17 +66,10 @@
 
 
 <div class="container">
-    <div class="img-container row justify-content-center">
-        <div class="col-md-10 col-log-8 mt-3">
+    <div class="row justify-content-center">
 
-
-            {% if user.is_authenticated %}
-                {{user}} 로그인중
-            {% else %}
             {% block content %}
             {% endblock %}
-            {% endif %}
-        </div>
     </div>
 </div>
 </body>

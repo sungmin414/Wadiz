@@ -64,7 +64,8 @@ AUTHENTICATION_BACKENDS = [
 
 INSTALLED_APPS = [
     'members',
-    'rest_framework,',
+    'reward',
+    'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

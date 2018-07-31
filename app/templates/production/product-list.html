@@ -1,7 +1,47 @@
 {% extends 'index.html' %}
 
 {% block content %}
+<!--<h2>reward list</h2>-->
 
-    <p>로그인</p>
+<style>
+    .title {
+        max-height: 48px;
+        line-height: 24px;
+        font-size: 17px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .img-layout {
+        height:150px;
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        background-size: cover;
+    }
+
+
+
+
+</style>
+
+
+{% for reward in rewards %}
+
+<div class="card col-md-3 ml-2 mr-2 mb-3" style="padding-top:150px; position:relative;">
+    <div class="img-layout" style="background-image: url({{reward.product_img}});"></div>
+
+    <div class="card-body" style="padding: 0; padding-bottom: 20px;">
+        <h4 class="card-title title mt-2">{{reward.product_name}}</h4>
+        <span class="card-subtitle mb-2 text-muted">{{reward.product_type}} / </span>
+        <span class="card-subtitle mb-2 text-muted">{{reward.company_name}}</span>
+
+        <h6 class="card-text ml-2 pt-2">{{reward.total_amount}}원</h6>
+    </div>
+
+</div>
+
+{% endfor %}
 
 {% endblock %}

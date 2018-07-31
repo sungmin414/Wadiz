@@ -12,6 +12,9 @@ django-storages = "*"
 pillow = "*"
 "boto3" = "*"
 django-rest-framework = "*"
+"beautifulsoup4" = "*"
+lxml = "*"
+selenium = "*"
 
 [dev-packages]
 awsebcli = "*"

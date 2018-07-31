@@ -12,27 +12,24 @@
             <li class="menu mr-2"><a href="">...</a></li>
         </ul>
 
-        <div>
-            <ul>
-                <li>유저리스트</li>
-            </ul>
-        </div>
+        <ul class="layout-header">
+            {% if user.is_authenticated %}
+            <li>
+                <form action="{% url 'members:logout' %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success">로그아웃</button>
+                </form>
+            </li>
+            {% else %}
+            <li>
+                <a class="btn btn-primary" href="{% url 'members:login' %}">로그인</a>
+            </li>
+            <li>
+                <a class="btn btn-primary" href="{% url 'members:signup2' %}">회원가입</a>
+            </li>
+            {% endif %}
+        </ul>
     </div>
-    {% if user.is_authenticated %}
-    <div class="log-out">
 
-        <form action="{% url 'members:logout' %}" method="POST">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-success">로그아웃</button>
-        </form>
-
-    </div>
-
-    {% else %}
-    <div class="layout-header">
-        <a class="btn btn-primary" href="{% url 'members:login' %}">로그인</a>
-        <a class="btn btn-primary" href="{% url 'members:signup2' %}">회원가입</a>
-    </div>
-    {% endif %}
 </header>
 {% endblock %}
