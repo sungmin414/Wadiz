@@ -7,7 +7,7 @@ User = get_user_model()
 
 
 class SignupForm(forms.Form):
-    username = forms.CharField(
+    username = forms.EmailField(
         label='아이디',
         widget=forms.TextInput(
             attrs={
