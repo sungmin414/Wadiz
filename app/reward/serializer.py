@@ -16,5 +16,6 @@ class RewardSerializer(serializers.ModelSerializer):
             'interested_count',
             'start_time',
             'end_time',
+            'cur_amount',
             'total_amount',
         )

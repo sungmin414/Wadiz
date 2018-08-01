@@ -19,6 +19,8 @@ class Reward(models.Model):
 
     end_time = models.CharField(max_length=100)
 
+    cur_amount = models.PositiveIntegerField(blank=True)
+
     total_amount = models.PositiveIntegerField()
 
     like_users = models.ManyToManyField(
