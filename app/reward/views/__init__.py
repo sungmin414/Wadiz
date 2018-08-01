@@ -11,12 +11,11 @@ from reward.models import Reward
 
 
 def reward_list(request):
-
     # Reward.objects.all().delete()
 
     if Reward.objects.count() < 10:
         WadizCrawler.create_detail_html()
-        WadizCrawler.get_item_list()
+        WadizCrawler.get_reward_list()
 
     reward = Reward.objects.all()
 
@@ -67,7 +66,7 @@ class WadizCrawler:
         driver.close()
 
     @classmethod
-    def get_item_list(cls):
+    def get_reward_list(cls):
         file_path = 'reward/data/wadiz_reward_list.html'
 
         html = open(file_path, 'rt').read()
@@ -76,15 +75,36 @@ class WadizCrawler:
 
         ul_contents = soup.select("ul._34FDqXUubQC345dbhWBh3o li")
 
+        for content in ul_contents:
+            product_name = content.select_one('a > h4').get_text(strip=True)
+
+            product_type = content.select_one('a > span').get_text(strip=True)
+
+            company_name = content.select_one('button > span').get_text(strip=True)
+
+            total_amount = ''.join(
+                re.findall(r'(\d)', content.select_one('span:nth-of-type(5)').get_text(strip=True)))
+
+            product_img = ''.join(
+                re.findall(r'url\("(\S*)"\)', content.select_one('div._3gmVBJTXNxBdKgoA_xSK3R').get('style')))
+
+            cls.reward_dict['product_name'] = product_name
+            cls.reward_dict['product_type'] = product_type
+            cls.reward_dict['company_name'] = company_name
+            cls.reward_dict['total_amount'] = total_amount
+            cls.reward_dict['product_img'] = product_img
+
+            Reward.objects.create(**cls.reward_dict)
+
         for detail in cls.detail_info_list:
 
             soup = BeautifulSoup(detail, 'lxml')
 
-            detail_infos = soup.select('div.wd-ui-cont')
+            div_list = soup.select('div.wd-ui-cont')
 
-            for item in detail_infos:
+            for reward_info in div_list:
                 amount, period = re.findall('금액(\S*)펀딩기간(\S*)',
-                                            item.select_one('div.social-info + br + div p:nth-of-type(1)').get_text(
+                                            reward_info.select_one('div.social-info + br + div p:nth-of-type(1)').get_text(
                                                 strip=True))[0]
                 total_amount = ''.join(re.findall(r'(\d)', amount))
                 start_time, end_time = re.findall('(\S*)-(\S*)', period)[0]
@@ -92,27 +112,6 @@ class WadizCrawler:
                 cls.reward_dict['start_time'] = start_time
                 cls.reward_dict['end_time'] = end_time
                 cls.reward_dict['total_amount'] = total_amount
-
-            for content in ul_contents:
-                product_name = content.select_one('a > h4').get_text(strip=True)
-
-                product_type = content.select_one('a > span').get_text(strip=True)
-
-                company_name = content.select_one('button > span').get_text(strip=True)
-
-                total_amount = ''.join(
-                    re.findall(r'(\d)', content.select_one('span:nth-of-type(5)').get_text(strip=True)))
-
-                product_img = ''.join(
-                    re.findall(r'url\("(\S*)"\)', content.select_one('div._3gmVBJTXNxBdKgoA_xSK3R').get('style')))
-
-                cls.reward_dict['product_name'] = product_name
-                cls.reward_dict['product_type'] = product_type
-                cls.reward_dict['company_name'] = company_name
-                cls.reward_dict['total_amount'] = total_amount
-                cls.reward_dict['product_img'] = product_img
-
-                Reward.objects.create(**cls.reward_dict)
 
     @classmethod
     def create_detail_html(cls):

@@ -13,6 +13,7 @@ class RewardSerializer(serializers.ModelSerializer):
             'product_type',
             'company_name',
             'product_img',
+            'interested_count',
             'start_time',
             'end_time',
             'total_amount',

@@ -1,6 +1,3 @@
-from django.test import TestCase
-
-# Create your tests here.
 from rest_framework import status
 from rest_framework.test import APITestCase
 import json
@@ -16,6 +13,7 @@ def get_dummy_reward():
         product_type='노트북',
         company_name='와디즈주식회사',
         product_img='노트북.jpg',
+        interested_count='100',
         start_time='2018-08-15',
         end_time='2018-08-20',
         total_amount=2000000

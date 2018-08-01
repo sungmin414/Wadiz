@@ -21,6 +21,7 @@ requests = "*"
 awsebcli = "*"
 ipython = "*"
 django-extensions = "*"
+jupyter = "*"
 
 [requires]
 python_version = "3.6"

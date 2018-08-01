@@ -13,6 +13,8 @@ class Reward(models.Model):
 
     product_img = models.CharField(max_length=200)
 
+    interested_count = models.PositiveIntegerField(blank=True)
+
     start_time = models.CharField(max_length=100)
 
     end_time = models.CharField(max_length=100)

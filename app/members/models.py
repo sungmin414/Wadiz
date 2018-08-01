@@ -11,5 +11,7 @@ class User(AbstractUser):
 
     img_profile = models.ImageField(upload_to='user', blank=True)
 
+    nickname = models.CharField(max_length=16)
+
     def __str__(self):
         return self.username
