@@ -8,7 +8,7 @@ from .. import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('members/', include('members.urls.views')),
-    path('rewards/', include('reward.urls')),
+    path('rewards/', include('reward.urls.views')),
     path('', views.index, name='index')
 
 ]

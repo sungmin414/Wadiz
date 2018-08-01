@@ -13,7 +13,9 @@ class Reward(models.Model):
 
     product_img = models.CharField(max_length=200)
 
-    period = models.DateTimeField(auto_now_add=True)
+    start_time = models.CharField(max_length=100)
+
+    end_time = models.CharField(max_length=100)
 
     total_amount = models.PositiveIntegerField()
 
