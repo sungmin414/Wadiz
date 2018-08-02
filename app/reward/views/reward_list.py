@@ -15,6 +15,8 @@ __all__ = (
 
 def reward_list(request):
 
+    # Reward.objects.all().delete()
+
     if Reward.objects.count() < 10:
         WadizCrawler.get_reward_list()
 
