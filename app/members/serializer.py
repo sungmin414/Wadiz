@@ -14,4 +14,3 @@ class UserSerializer(serializers.ModelSerializer):
             'nickname',
             'img_profile',
         )
-
