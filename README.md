@@ -1,1 +1,1 @@
-new deploy example
+Wadiz team project
