@@ -14,7 +14,6 @@ __all__ = (
 
 
 def reward_list(request):
-
     # Reward.objects.all().delete()
 
     if Reward.objects.count() < 10:
@@ -110,6 +109,40 @@ class WadizCrawler:
 
             # 현재까지 좋아요를 받은 개수
             interested_count = soup.select_one('em.cnt-like').get_text(strip=True)
+
+            gifts = soup.select('div.wd-ui-gift button')
+
+            for button in gifts:
+
+                gift_on_sale = True
+                gift_price = ''.join(re.findall('(\d)', button.select_one('dt').get_text(strip=True)))
+                gift_name = button.select_one('p.reward-name').get_text(strip=True)
+                gift_shipping_charge = ''.join(
+                    re.findall('(\d)', button.select_one('li.shipping em').get_text(strip=True)))
+                gift_expecting_departure_date = button.select_one('li.date em').get_text(strip=True)
+                # 크롤링 데이터에서 수량이 매진되어 현재 개수와 총 개수를 파악 하기 어려울때, soldout 클래스 여부에따라 변수 할당결정
+                gift_check = button.select_one('p.reward-qty').get('class')
+                gift_total = ''
+                reward_sold_count = button.select_one('p.reward-soldcount strong').get_text(strip=True)
+
+                if 'soldout' in gift_check:
+                    gift_on_sale = False
+                    # 만약 다팔렸다면 팔린 개수와 총개수는 동일함
+                    gift_total = reward_sold_count
+
+                if gift_on_sale:
+                    gift_total = button.select_one('p.reward-qty strong').get_text(strip=True)
+
+                print(product_name)
+                print('가격: ', gift_price)
+                print('상품이름: ', gift_name)
+                print('배송비: ', gift_shipping_charge)
+                print('리워드 배송일: ', gift_expecting_departure_date)
+                print('총 개수:', gift_total)
+                print('펀딩된 수량: ', reward_sold_count)
+                print('펀딩 가능 여부: ', gift_on_sale)
+                print('펀딩기간: ', start_time, end_time)
+                print('')
 
             cls.reward_dict['product_name'] = product_name
             cls.reward_dict['product_type'] = product_type
