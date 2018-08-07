@@ -6,7 +6,7 @@ import re
 import time
 import requests
 
-from reward.models import Reward
+from reward.models import Reward, Product
 
 __all__ = (
     'reward_list',
@@ -14,32 +14,39 @@ __all__ = (
 
 
 def reward_list(request):
-    # Reward.objects.all().delete()
+    # Product.objects.all().delete()
 
-    if Reward.objects.count() < 10:
+    print('리워드 실행')
+
+    if Product.objects.count() < 10:
+        WadizCrawler.get_product_list()
         WadizCrawler.get_reward_list()
-
-    reward = Reward.objects.all()
+        print('db 작동')
+    product = Product.objects.all()
 
     context = {
-        'rewards': reward
+        'products': product
     }
 
     return render(request, 'production/product-list.html', context)
 
 
 class WadizCrawler:
-    reward_dict = {
+    product_dict = {
         'product_name': '',
         'product_type': '',
-        'company_name': '',
+        'product_company_name': '',
         'product_img': '',
-        'start_time': '',
-        'end_time': '',
-        'cur_amount': 0,
-        'total_amount': 0,
-        'interested_count': 0,
+        'product_start_time': '',
+        'product_end_time': '',
+        'product_cur_amount': 0,
+        'product_total_amount': 0,
+        'product_interested_count': 0,
     }
+
+    product_list = []
+
+    product_no = []
 
     @classmethod
     def start(cls):
@@ -66,7 +73,7 @@ class WadizCrawler:
         driver.close()
 
     @classmethod
-    def get_reward_list(cls):
+    def get_product_list(cls):
         file_path = 'reward/data/wadiz_reward_list.html'
 
         detail_file_path = 'reward/data/detail/'
@@ -110,51 +117,75 @@ class WadizCrawler:
             # 현재까지 좋아요를 받은 개수
             interested_count = soup.select_one('em.cnt-like').get_text(strip=True)
 
-            gifts = soup.select('div.wd-ui-gift button')
+            cls.product_dict['product_name'] = product_name
+            cls.product_dict['product_type'] = product_type
+            cls.product_dict['product_company_name'] = company_name
+            cls.product_dict['product_img'] = product_img
+            cls.product_dict['product_start_time'] = start_time
+            cls.product_dict['product_end_time'] = end_time
+            cls.product_dict['product_cur_amount'] = int(cur_amount)
+            cls.product_dict['product_total_amount'] = int(total_amount)
+            cls.product_dict['product_interested_count'] = int(interested_count)
+            cls.product_no.append(detail_page_id)
 
-            for button in gifts:
+            cls.product_list.append(Product.objects.create(**cls.product_dict))
 
-                gift_on_sale = True
-                gift_price = ''.join(re.findall('(\d)', button.select_one('dt').get_text(strip=True)))
-                gift_name = button.select_one('p.reward-name').get_text(strip=True)
-                gift_shipping_charge = ''.join(
-                    re.findall('(\d)', button.select_one('li.shipping em').get_text(strip=True)))
-                gift_expecting_departure_date = button.select_one('li.date em').get_text(strip=True)
+    @classmethod
+    def get_reward_list(cls):
+
+        detail_file_path = 'reward/data/detail/'
+
+        # 각 product html 을 순회
+
+        for i, product in enumerate(cls.product_list):
+            detail_html = open(f'{detail_file_path}{cls.product_no[i]}.html', 'rt').read()
+
+            soup = BeautifulSoup(detail_html, 'lxml')
+
+            rewards = soup.select('div.wd-ui-gift button')
+
+            for reward in rewards:
+
+                reward_on_sale = True
+                reward_price = ''.join(re.findall('(\d)', reward.select_one('dt').get_text(strip=True)))
+                reward_name = reward.select_one('p.reward-name').get_text(strip=True)
+                reward_shipping_charge = ''.join(
+                    re.findall('(\d)', reward.select_one('li.shipping em').get_text(strip=True)))
+                reward_expecting_departure_date = reward.select_one('li.date em').get_text(strip=True)
                 # 크롤링 데이터에서 수량이 매진되어 현재 개수와 총 개수를 파악 하기 어려울때, soldout 클래스 여부에따라 변수 할당결정
-                gift_check = button.select_one('p.reward-qty').get('class')
-                gift_total = ''
-                reward_sold_count = button.select_one('p.reward-soldcount strong').get_text(strip=True)
+                reward_check = reward.select_one('p.reward-qty').get('class')
+                reward_total_count = ''
+                reward_sold_count = reward.select_one('p.reward-soldcount strong').get_text(strip=True)
 
-                if 'soldout' in gift_check:
-                    gift_on_sale = False
+                if 'soldout' in reward_check:
+                    reward_on_sale = False
                     # 만약 다팔렸다면 팔린 개수와 총개수는 동일함
-                    gift_total = reward_sold_count
+                    reward_total_count = reward_sold_count
 
-                if gift_on_sale:
-                    gift_total = button.select_one('p.reward-qty strong').get_text(strip=True)
+                if reward_on_sale:
+                    reward_total_count = reward.select_one('p.reward-qty strong').get_text(strip=True)
 
-                print(product_name)
-                print('가격: ', gift_price)
-                print('상품이름: ', gift_name)
-                print('배송비: ', gift_shipping_charge)
-                print('리워드 배송일: ', gift_expecting_departure_date)
-                print('총 개수:', gift_total)
-                print('펀딩된 수량: ', reward_sold_count)
-                print('펀딩 가능 여부: ', gift_on_sale)
-                print('펀딩기간: ', start_time, end_time)
-                print('')
+                Reward.objects.create(
+                    reward_name=reward_name,
+                    reward_price=int(reward_price),
+                    reward_shipping_charge=int(reward_shipping_charge),
+                    reward_expecting_departure_date=reward_expecting_departure_date,
+                    reward_total_count=int(reward_total_count),
+                    reward_sold_count=int(reward_sold_count),
+                    reward_on_sale=reward_on_sale,
+                    product=product,
+                )
 
-            cls.reward_dict['product_name'] = product_name
-            cls.reward_dict['product_type'] = product_type
-            cls.reward_dict['company_name'] = company_name
-            cls.reward_dict['product_img'] = product_img
-            cls.reward_dict['start_time'] = start_time
-            cls.reward_dict['end_time'] = end_time
-            cls.reward_dict['cur_amount'] = int(cur_amount)
-            cls.reward_dict['total_amount'] = int(total_amount)
-            cls.reward_dict['interested_count'] = int(interested_count)
-
-            Reward.objects.create(**cls.reward_dict)
+                #
+                # print('가격: ', reward_price)
+                # print('상품이름: ', reward_name)
+                # print('배송비: ', reward_shipping_charge)
+                # print('리워드 배송일: ', reward_expecting_departure_date)
+                # print('총 개수:', reward_total)
+                # print('펀딩된 수량: ', reward_sold_count)
+                # print('펀딩 가능 여부: ', reward_on_sale)
+                #
+                # print('')
 
     @classmethod
     def create_detail_html(cls):

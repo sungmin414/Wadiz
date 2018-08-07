@@ -5,51 +5,25 @@ from django.conf import settings
 
 
 class Product(models.Model):
-    product_name = models.CharField(max_length=300)
-
-    product_price = models.PositiveIntegerField(default=0)
-
-    product_shipping_charge = models.PositiveIntegerField(default=0)
-
-    product_expecting_departure_date = models.CharField(max_length=100)
-
-    product_total_count = models.PositiveIntegerField(default=0)
-
-    product_sold_count = models.PositiveIntegerField(default=0)
-
-    product_on_sale = models.BooleanField(default=True)
-
-    def __str__(self):
-        return f'{self.product_name}'
-
-
-class Reward(models.Model):
     product_name = models.CharField(max_length=100)
 
     product_type = models.CharField(max_length=100)
 
-    company_name = models.CharField(max_length=100)
+    product_company_name = models.CharField(max_length=100)
 
     product_img = models.CharField(max_length=200)
 
-    interested_count = models.PositiveIntegerField(blank=True, default=0)
+    product_interested_count = models.PositiveIntegerField(blank=True, default=0)
 
-    start_time = models.CharField(max_length=100)
+    product_start_time = models.CharField(max_length=100)
 
-    end_time = models.CharField(max_length=100)
+    product_end_time = models.CharField(max_length=100)
 
-    cur_amount = models.PositiveIntegerField(blank=True, default=0)
+    product_cur_amount = models.PositiveIntegerField(blank=True, default=0)
 
-    total_amount = models.PositiveIntegerField(default=0)
+    product_total_amount = models.PositiveIntegerField(default=0)
 
-    product = models.ForeignKey(
-        Product,
-        blank=True,
-        on_delete=models.CASCADE,
-        related_name='rewards'
-    )
-
-    like_users = models.ManyToManyField(
+    product_like_user = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         blank=True,
         related_name='like_posts'
@@ -60,6 +34,32 @@ class Reward(models.Model):
 
     class Meta:
         ordering = ['-pk']
+
+
+class Reward(models.Model):
+    reward_name = models.CharField(max_length=300)
+
+    reward_price = models.PositiveIntegerField(default=0)
+
+    reward_shipping_charge = models.PositiveIntegerField(default=0)
+
+    reward_expecting_departure_date = models.CharField(max_length=100)
+
+    reward_total_count = models.PositiveIntegerField(default=0)
+
+    reward_sold_count = models.PositiveIntegerField(default=0)
+
+    reward_on_sale = models.BooleanField(default=True)
+
+    product = models.ForeignKey(
+        Product,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name='products'
+    )
+
+    def __str__(self):
+        return f'{self.reward_name}'
 
 
 class Comment(models.Model):
