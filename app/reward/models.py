@@ -23,6 +23,8 @@ class Product(models.Model):
 
     product_total_amount = models.PositiveIntegerField(default=0)
 
+    product_description = models.TextField(blank=True)
+
     product_like_user = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         blank=True,

@@ -17,11 +17,11 @@ def reward_list(request):
     # Product.objects.all().delete()
 
     print('리워드 실행')
-
+    #
     if Product.objects.count() < 10:
         WadizCrawler.get_product_list()
         WadizCrawler.get_reward_list()
-        print('db 작동')
+
     product = Product.objects.all()
 
     context = {
@@ -42,6 +42,7 @@ class WadizCrawler:
         'product_cur_amount': 0,
         'product_total_amount': 0,
         'product_interested_count': 0,
+        'product_description': '',
     }
 
     product_list = []
@@ -104,6 +105,9 @@ class WadizCrawler:
             # detail(id).html의 내용을 beautiful soup으로 파싱
             soup = BeautifulSoup(detail_html, 'lxml')
 
+            # detail 페이지 안의 description 내부의 html 내용을 담음
+            description = soup.select_one('div.wd-ui-cont div.inner-contents')
+
             # 목표금액, 기간정보를 가진 div 선택
             detail_info = soup.select_one('div.social-info + br + div p:nth-of-type(1)').get_text(strip=True)
 
@@ -117,6 +121,19 @@ class WadizCrawler:
             # 현재까지 좋아요를 받은 개수
             interested_count = soup.select_one('em.cnt-like').get_text(strip=True)
 
+            # Product.objects.create(
+            #     product_name=product_name,
+            #     product_type=product_type,
+            #     product_company_name=company_name,
+            #     product_img=product_img,
+            #     product_start_time=start_time,
+            #     product_end_time=end_time,
+            #     product_cur_amount=int(cur_amount),
+            #     product_total_amount=int(total_amount),
+            #     product_interested_count=int(interested_count),
+            #     product_description=description
+            # )
+
             cls.product_dict['product_name'] = product_name
             cls.product_dict['product_type'] = product_type
             cls.product_dict['product_company_name'] = company_name
@@ -126,10 +143,12 @@ class WadizCrawler:
             cls.product_dict['product_cur_amount'] = int(cur_amount)
             cls.product_dict['product_total_amount'] = int(total_amount)
             cls.product_dict['product_interested_count'] = int(interested_count)
+            cls.product_dict['product_description'] = str(description)
             cls.product_no.append(detail_page_id)
 
             cls.product_list.append(Product.objects.create(**cls.product_dict))
 
+        # print(type(cls.product_dict['product_description']))
     @classmethod
     def get_reward_list(cls):
 
