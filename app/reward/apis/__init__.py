@@ -1,4 +1,6 @@
 from rest_framework import generics, mixins
+from rest_framework.generics import ListAPIView
+from rest_framework.views import APIView
 
 from ..models import Product, Reward
 from ..serializer import ProductSerializer, RewardSerializer
@@ -23,3 +25,4 @@ class ProductDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
 class RewardList(generics.ListAPIView):
     queryset = Reward.objects.all()
     serializer_class = RewardSerializer
+
