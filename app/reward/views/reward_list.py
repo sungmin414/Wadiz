@@ -121,19 +121,6 @@ class WadizCrawler:
             # 현재까지 좋아요를 받은 개수
             interested_count = soup.select_one('em.cnt-like').get_text(strip=True)
 
-            # Product.objects.create(
-            #     product_name=product_name,
-            #     product_type=product_type,
-            #     product_company_name=company_name,
-            #     product_img=product_img,
-            #     product_start_time=start_time,
-            #     product_end_time=end_time,
-            #     product_cur_amount=int(cur_amount),
-            #     product_total_amount=int(total_amount),
-            #     product_interested_count=int(interested_count),
-            #     product_description=description
-            # )
-
             cls.product_dict['product_name'] = product_name
             cls.product_dict['product_type'] = product_type
             cls.product_dict['product_company_name'] = company_name
@@ -145,10 +132,8 @@ class WadizCrawler:
             cls.product_dict['product_interested_count'] = int(interested_count)
             cls.product_dict['product_description'] = str(description)
             cls.product_no.append(detail_page_id)
-
             cls.product_list.append(Product.objects.create(**cls.product_dict))
 
-        # print(type(cls.product_dict['product_description']))
     @classmethod
     def get_reward_list(cls):
 
@@ -168,6 +153,7 @@ class WadizCrawler:
                 reward_on_sale = True
                 reward_price = ''.join(re.findall('(\d)', reward.select_one('dt').get_text(strip=True)))
                 reward_name = reward.select_one('p.reward-name').get_text(strip=True)
+                reward_option = reward.select_one('dd p:nth-of-type(2)').get_text(strip=True)
                 reward_shipping_charge = ''.join(
                     re.findall('(\d)', reward.select_one('li.shipping em').get_text(strip=True)))
                 reward_expecting_departure_date = reward.select_one('li.date em').get_text(strip=True)
@@ -186,6 +172,7 @@ class WadizCrawler:
 
                 Reward.objects.create(
                     reward_name=reward_name,
+                    reward_option=reward_option,
                     reward_price=int(reward_price),
                     reward_shipping_charge=int(reward_shipping_charge),
                     reward_expecting_departure_date=reward_expecting_departure_date,
@@ -195,7 +182,6 @@ class WadizCrawler:
                     product=product,
                 )
 
-                #
                 # print('가격: ', reward_price)
                 # print('상품이름: ', reward_name)
                 # print('배송비: ', reward_shipping_charge)
