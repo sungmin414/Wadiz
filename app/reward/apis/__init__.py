@@ -10,9 +10,9 @@ class ProductList(generics.ListAPIView):
     serializer_class = ProductSerializer
     pagination_class = ProductListPagination
 
-    def get_queryset(self):
-        category = self.request.query_params.get('category', None)
-        return Product.objects.filter(product_type__contains=category)
+    # def get_queryset(self):
+    #     category = self.request.query_params.get('category', None)
+    #     return Product.objects.filter(product_type__contains=category)
 
 
 class ProductDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
