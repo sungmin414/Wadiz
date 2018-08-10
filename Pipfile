@@ -16,6 +16,7 @@ django-rest-framework = "*"
 lxml = "*"
 selenium = "*"
 requests = "*"
+django-filter = "*"
 
 [dev-packages]
 awsebcli = "*"

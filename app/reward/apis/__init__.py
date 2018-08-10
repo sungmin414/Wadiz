@@ -1,4 +1,6 @@
-from rest_framework import generics, mixins
+import django_filters.rest_framework
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import generics, mixins, filters
 
 from ..models import Product, Reward
 from ..serializer import ProductSerializer, RewardSerializer
@@ -23,3 +25,32 @@ class ProductDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
 class RewardList(generics.ListAPIView):
     queryset = Reward.objects.all()
     serializer_class = RewardSerializer
+
+# 현재 사용자에 대한 필터링
+# class RewardUserList(generics.ListAPIView):
+#     serializer_class = ProductSerializer
+#
+#     def get_queryset(self):
+#         user = self.request.user
+#         return Reward.objects.filter()
+
+
+# 쿼리 매개 변수에 대한 필터링
+class RewardFilterList(generics.ListAPIView):
+    queryset = Reward.objects.all()
+    serializer_class = RewardSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('reward_name', )
+
+# 오름차순 내림차순 필터링
+class RewardProductList(generics.ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    filter_backends = (filters.OrderingFilter, )
+    ordering_fields = ('product_interested_count', 'product_cur_amount', 'product_end_time')
+
+
+
+
+
+

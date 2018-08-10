@@ -60,6 +60,10 @@ AUTHENTICATION_BACKENDS = [
     'members.backends.SettingsBackend',
 ]
 
+# 필터링 설정
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
+}
 # Application definition
 
 INSTALLED_APPS = [
@@ -67,6 +71,7 @@ INSTALLED_APPS = [
     'reward',
     'rest_framework',
     'rest_framework.authtoken',
+    'django_filters',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
