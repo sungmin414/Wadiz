@@ -10,6 +10,10 @@ class ProductList(generics.ListAPIView):
     serializer_class = ProductSerializer
     pagination_class = ProductListPagination
 
+    def get_queryset(self):
+        category = self.request.query_params.get('category', None)
+        return Product.objects.filter(product_type__contains=category)
+
 
 class ProductDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
 
@@ -23,3 +27,12 @@ class ProductDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
 class RewardList(generics.ListAPIView):
     queryset = Reward.objects.all()
     serializer_class = RewardSerializer
+
+
+class RewardDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
+
+    queryset = Reward.objects.all()
+    serializer_class = RewardSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)

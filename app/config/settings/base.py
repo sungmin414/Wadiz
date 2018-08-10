@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 import json
+import raven
 
 DEBUG = True
 
@@ -67,6 +68,8 @@ INSTALLED_APPS = [
     'reward',
     'rest_framework',
     'rest_framework.authtoken',
+    'raven.contrib.django.raven_compat',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -74,6 +77,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+
+# Raven
+RAVEN_CONFIG = {
+    'dsn': secrets['DSN'],
+    # If you are using git, you can also automatically configure the
+    # release based on the git info.
+    'release': raven.fetch_git_sha(os.path.abspath(os.pardir)),
+}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

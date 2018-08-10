@@ -3,7 +3,26 @@ from rest_framework import serializers
 from reward.models import Product, Reward
 
 
+class RewardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Reward
+
+        fields = (
+            'reward_name',
+            'reward_option',
+            'reward_price',
+            'reward_shipping_charge',
+            'reward_expecting_departure_date',
+            'reward_total_count',
+            'reward_sold_count',
+            'reward_on_sale',
+            'product',
+        )
+
+
 class ProductSerializer(serializers.ModelSerializer):
+    rewards = RewardSerializer(many=True)
+
     class Meta:
         model = Product
 
@@ -18,20 +37,5 @@ class ProductSerializer(serializers.ModelSerializer):
             'product_end_time',
             'product_cur_amount',
             'product_total_amount',
-        )
-
-
-class RewardSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Reward
-
-        fields = (
-            'reward_name',
-            'reward_price',
-            'reward_shipping_charge',
-            'reward_expecting_departure_date',
-            'reward_total_count',
-            'reward_sold_count',
-            'reward_on_sale',
-            'product',
+            'rewards',
         )

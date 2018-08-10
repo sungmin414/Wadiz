@@ -43,7 +43,7 @@ class SignupForm(forms.Form):
         )
     )
 
-    image_profile = forms.ImageField(
+    ima_profile = forms.ImageField(
         required=False
     )
 
