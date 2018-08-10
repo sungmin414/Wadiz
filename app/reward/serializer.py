@@ -8,6 +8,7 @@ class RewardSerializer(serializers.ModelSerializer):
         model = Reward
 
         fields = (
+            'pk',
             'reward_name',
             'reward_option',
             'reward_price',
@@ -21,8 +22,6 @@ class RewardSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    rewards = RewardSerializer(many=True)
-
     class Meta:
         model = Product
 
@@ -37,5 +36,25 @@ class ProductSerializer(serializers.ModelSerializer):
             'product_end_time',
             'product_cur_amount',
             'product_total_amount',
+
+        )
+
+
+class ProductDetailSerializer(ProductSerializer):
+    rewards = RewardSerializer(many=True)
+
+    class Meta(ProductSerializer.Meta):
+        fields = (
+            'pk',
+            'product_name',
+            'product_type',
+            'product_company_name',
+            'product_img',
+            'product_interested_count',
+            'product_start_time',
+            'product_end_time',
+            'product_cur_amount',
+            'product_total_amount',
+            'product_description',
             'rewards',
         )
