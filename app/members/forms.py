@@ -61,7 +61,7 @@ class SignupForm(forms.Form):
         fields = [
             'username',
             'password',
-            'img-profile',
+            'img_profile',
             'nickname'
         ]
 
