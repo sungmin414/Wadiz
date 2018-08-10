@@ -5,6 +5,13 @@ from django.conf import settings
 
 
 class Product(models.Model):
+    PRODUCT_TYPE = (
+        ('tech', 'Freshman'),
+        ('SO', 'Sophomore'),
+        ('JR', 'Junior'),
+        ('SR', 'Senior'),
+    )
+
     product_name = models.CharField(max_length=100)
 
     product_type = models.CharField(max_length=100)
@@ -39,7 +46,9 @@ class Product(models.Model):
 
 
 class Reward(models.Model):
-    reward_name = models.CharField(max_length=300)
+    reward_name = models.CharField(max_length=200)
+
+    reward_option = models.TextField()
 
     reward_price = models.PositiveIntegerField(default=0)
 
@@ -57,7 +66,7 @@ class Reward(models.Model):
         Product,
         blank=True,
         on_delete=models.CASCADE,
-        related_name='products'
+        related_name='rewards'
     )
 
     def __str__(self):

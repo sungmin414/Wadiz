@@ -4,8 +4,13 @@ from .. import apis
 
 urlpatterns = [
     path('', apis.ProductList.as_view()),
+    path('category/', apis.ProductCategoryList.as_view()),
     path('<int:pk>/', apis.ProductDetail.as_view()),
+
     path('item/', apis.RewardList.as_view()),
     path('search/', apis.RewardFilterList.as_view()),
     path('search/product/', apis.RewardProductList.as_view()),
+
+
+
 ]
