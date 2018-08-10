@@ -28,22 +28,21 @@ class ProductCategoryList(generics.ListAPIView):
         return Product.objects.filter(product_type__contains=category)
 
 
-
 class RewardList(generics.ListAPIView):
     queryset = Reward.objects.all()
     serializer_class = RewardSerializer
 
 
-
 # 쿼리 매개 변수에 대한 필터링
-class RewardFilterList(generics.ListAPIView):
-    queryset = Reward.objects.all()
-    serializer_class = RewardSerializer
+class ProductFilterList(generics.ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
     filter_backends = (filters.SearchFilter,)
-    search_fields = ('reward_name', )
+    search_fields = ('product_name', )
+
 
 # 오름차순 내림차순 필터링
-class RewardProductList(generics.ListAPIView):
+class ProductOrderingList(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = (filters.OrderingFilter, )
