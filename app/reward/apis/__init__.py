@@ -1,13 +1,4 @@
-
-import django_filters.rest_framework
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, mixins, filters
-
-from rest_framework import generics, mixins
-from rest_framework.generics import ListAPIView
-from rest_framework.views import APIView
-
-
 from ..models import Product, Reward
 from ..serializer import ProductSerializer, RewardSerializer, ProductDetailSerializer
 from utils.paginations import ProductListPagination
@@ -38,20 +29,15 @@ class ProductFilterList(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = (filters.SearchFilter,)
-    search_fields = ('product_name', )
+    search_fields = ('product_name',)
 
 
 # 오름차순 내림차순 필터링
 class ProductOrderingList(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    filter_backends = (filters.OrderingFilter, )
+    filter_backends = (filters.OrderingFilter,)
     ordering_fields = ('product_interested_count', 'product_cur_amount', 'product_end_time')
-
-
-
-
-
 
 
 class ProductDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
@@ -60,4 +46,3 @@ class ProductDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
-
