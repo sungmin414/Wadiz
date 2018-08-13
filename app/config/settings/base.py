@@ -12,7 +12,16 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 import json
-import raven
+# import raven
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'dosio0102@gmail.com'
+EMAIL_HOST_PASSWORD = 'tmddms12'
+SERVER_EMAIL = 'dosio0102@gmail.com'
+DEFAULT_FROM_MAIL = 'dosio0102'
 
 DEBUG = True
 
