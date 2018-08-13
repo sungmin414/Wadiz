@@ -16,6 +16,19 @@ from ..serializer import UserSerializer
 User = get_user_model()
 
 
+class CreateTest(APIView):
+    def post(self, request):
+        serializer = UserSerializer(data=request.data, many=True)
+        if serializer.is_valid():
+            user = User.objects.create_user(
+                username=request.data.get('username'),
+                password=request.data.get('password'),
+                nickname=request.data.get('nickname'),
+            )
+            return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
+        return Response('유져 생성 미완료')
+
+
 class UserList(APIView):
 
     def get(self, request):

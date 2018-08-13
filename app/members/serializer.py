@@ -28,10 +28,10 @@ class UserSerializer(serializers.ModelSerializer):
             'img_profile',
         )
 
-    def validate_password(self, value):
-        if value == self.initial_data.get('password1'):
-            return value
-        raise ValidationError('(password, password1) 불일치')
+    # def validate_password(self, value):
+    #     if value == self.initial_data.get('password1'):
+    #         return value
+    #     raise ValidationError('(password, password1) 불일치')
 
     def create(self, validated_data):
         user = User.objects.create(
