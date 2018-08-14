@@ -15,9 +15,10 @@ __all__ = (
 
 def reward_list(request):
     # Product.objects.all().delete()
-
+    # WadizCrawler.start()
     print('리워드 실행')
-    #
+
+    # WadizCrawler.create_detail_html()
     if Product.objects.count() < 10:
         WadizCrawler.get_product_list()
         WadizCrawler.get_reward_list()
@@ -52,15 +53,15 @@ class WadizCrawler:
     @classmethod
     def start(cls):
 
-        url = 'https://www.wadiz.kr/web/campaign/detail/21408'
+        url = 'https://wadiz.kr/web/wreward/category'
 
-        file_path = 'data/wadiz_reward_list.html'
+        file_path = 'reward/data/wadiz_reward_list.html'
 
-        driver = webdriver.Chrome('driver/chromedriver')
+        driver = webdriver.Chrome('reward/driver/chromedriver')
 
         driver.get(url)
 
-        time.sleep(2)
+        time.sleep(10)
 
         if not os.path.exists(file_path):
 
@@ -94,7 +95,7 @@ class WadizCrawler:
             company_name = content.select_one('button > span').get_text(strip=True)
 
             product_img = ''.join(
-                re.findall(r'url\("(\S*)"\)', content.select_one('div._3gmVBJTXNxBdKgoA_xSK3R').get('style')))
+                re.findall(r'url\("(\S*)"\)', content.select_one('span._3gmVBJTXNxBdKgoA_xSK3R').get('style')))
 
             # 메인페이지에서 해당 detail page의 id값을 추출
             detail_page_id = ''.join(re.findall('detail/(\d*)', content.select_one('a').get('href')))
