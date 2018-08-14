@@ -12,16 +12,9 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 import json
+
 # import raven
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'dosio0102@gmail.com'
-EMAIL_HOST_PASSWORD = 'tmddms12'
-SERVER_EMAIL = 'dosio0102@gmail.com'
-DEFAULT_FROM_MAIL = 'dosio0102'
 
 DEBUG = True
 
@@ -37,6 +30,17 @@ TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 
 secrets = json.load(open(os.path.join(SECRETS_DIR, 'base.json')))
 
+# email 발송 필요한 설정
+# .secrets/base.json 파일에 본인 메일 작성하면 됩니다
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = secrets['EMAIL_HOST_USER']  # 이메일주소
+EMAIL_HOST_PASSWORD = secrets['EMAIL_HOST_PASSWORD']  # 이메일 계정 비밀번호
+SERVER_EMAIL = secrets['SERVER_EMAIL']  # 이메일 주소
+DEFAULT_FROM_MAIL = secrets['DEFAULT_FROM_MAIL']  # 이메일 계정 아이디
+
 # Static [root 폴더를 삼음]
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(ROOT_DIR, '.static')
@@ -51,7 +55,6 @@ AWS_SECRET_ACCESS_KEY = secrets['AWS_SECRET_ACCESS_KEY']
 AWS_DEFAULT_ACL = secrets['AWS_DEFAULT_ACL']
 AWS_S3_REGION_NAME = secrets['AWS_S3_REGION_NAME']
 AWS_S3_SIGNATURE_VERSION = secrets['AWS_S3_SIGNATURE_VERSION']
-
 
 # STATIC
 STATICFILES_DIRS = [
@@ -86,7 +89,6 @@ INSTALLED_APPS = [
 
     'raven.contrib.django.raven_compat',
 
-
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -95,7 +97,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
-
 # Raven
 RAVEN_CONFIG = {
     'dsn': secrets['DSN'],
@@ -103,7 +104,6 @@ RAVEN_CONFIG = {
     # release based on the git info.
     # 'release': raven.fetch_git_sha(os.path.abspath(os.pardir)),
 }
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -137,7 +137,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
@@ -147,7 +146,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -167,7 +165,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
@@ -180,7 +177,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
@@ -204,7 +200,7 @@ LOGGING = {
     },
     'handlers': {
         'sentry': {
-            'level': 'ERROR', # To capture more than ERROR, change to WARNING, INFO, etc.
+            'level': 'ERROR',  # To capture more than ERROR, change to WARNING, INFO, etc.
             'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
             'tags': {'custom-tag': 'x'},
         },

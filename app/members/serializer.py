@@ -15,7 +15,7 @@ User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
     username = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
     password = serializers.SlugField(max_length=12, min_length=1, allow_blank=False, write_only=True)
-    nickname = serializers.CharField(max_length=10, validators=[UniqueValidator(queryset=User.objects.all())])
+    nickname = serializers.CharField(max_length=20, validators=[UniqueValidator(queryset=User.objects.all())])
 
     class Meta:
         model = User
@@ -28,19 +28,19 @@ class UserSerializer(serializers.ModelSerializer):
             'img_profile',
         )
 
-    # def validate_password(self, value):
-    #     if value == self.initial_data.get('password1'):
-    #         return value
-    #     raise ValidationError('(password, password1) 불일치')
+    def validate_password(self, value):
+        if value == self.initial_data.get('password1'):
+            return value
+        raise ValidationError('(password, password1) 불일치')
 
     def create(self, validated_data):
-        user = User.objects.create(
+        user = User.objects.create_user(
             username=validated_data['username'],
             password=validated_data['password'],
             nickname=validated_data['nickname'],
-            img_profile=validated_data['img_profile'],
+            # img_profile=validated_data['img_profile'],
         )
-        user.active = False
+        user.is_active = False
         user.save()
 
         message = render_to_string('user/account_activate_email.html', {
@@ -51,7 +51,7 @@ class UserSerializer(serializers.ModelSerializer):
         })
 
         mail_subject = 'test'
-        to_email = 'dosio0102@gmail.com'
+        to_email = user.username
         email = EmailMessage(mail_subject, message, to=[to_email])
         email.send()
 

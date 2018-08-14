@@ -1,6 +1,7 @@
 import traceback
 
 from django.contrib.auth import get_user_model
+from django.http import HttpResponse
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
 from rest_framework.authtoken.models import Token
@@ -9,24 +10,12 @@ from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import generics, status, permissions
+from urllib3 import HTTPResponse
 
 from members.token import account_activation_token
 from ..serializer import UserSerializer
 
 User = get_user_model()
-
-
-class CreateTest(APIView):
-    def post(self, request):
-        serializer = UserSerializer(data=request.data, many=True)
-        if serializer.is_valid():
-            user = User.objects.create_user(
-                username=request.data.get('username'),
-                password=request.data.get('password'),
-                nickname=request.data.get('nickname'),
-            )
-            return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
-        return Response('유져 생성 미완료')
 
 
 class UserList(APIView):
@@ -77,11 +66,11 @@ class UserActivate(APIView):
 
         try:
             if user is not None and account_activation_token.check_token(user, token):
-                user.active = True
+                user.is_active = True
                 user.save()
-                return Response(user.email + '계정이 활성화 되었습니다', status=status.HTTP_200_OK)
+                return HttpResponse(user.email + '계정이 활성화 되었습니다', status=status.HTTP_200_OK)
             else:
-                return Response('만료된 링크입니다', status=status.HTTP_400_BAD_REQUEST)
+                return HttpResponse('만료된 링크입니다', status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:
             print(traceback.format_exc())
