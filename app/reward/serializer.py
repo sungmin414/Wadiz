@@ -58,3 +58,14 @@ class ProductDetailSerializer(ProductSerializer):
             'product_description',
             'rewards',
         )
+
+
+class ProductFundingSerializer(ProductSerializer):
+    rewards = RewardSerializer(many=True)
+
+    class Meta(ProductSerializer.Meta):
+        fields = (
+            'pk',
+            'product_name',
+            'rewards',
+        )

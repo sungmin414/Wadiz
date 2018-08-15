@@ -1,7 +1,8 @@
 from rest_framework import generics, mixins, filters
 from ..models import Product, Reward
-from ..serializer import ProductSerializer, RewardSerializer, ProductDetailSerializer
+from ..serializer import ProductSerializer, RewardSerializer, ProductDetailSerializer, ProductFundingSerializer
 from utils.paginations import ProductListPagination
+from django.db.models import Q
 
 
 class ProductList(generics.ListAPIView):
@@ -16,7 +17,17 @@ class ProductCategoryList(generics.ListAPIView):
 
     def get_queryset(self):
         category = self.request.query_params.get('category', None)
-        return Product.objects.filter(product_type__contains=category)
+        product_name = self.request.query_params.get('product_name', None)
+        # ordering = self.
+        return Product.objects.filter(product_type__contains=category, product_name__contains=product_name)
+
+
+class ProductFundingList(mixins.RetrieveModelMixin, generics.GenericAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductFundingSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
 
 
 class RewardList(generics.ListAPIView):
