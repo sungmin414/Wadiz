@@ -36,6 +36,8 @@ class ProductSerializer(serializers.ModelSerializer):
             'product_end_time',
             'product_cur_amount',
             'product_total_amount',
+            'product_video_url',
+            'product_is_funding',
 
         )
 

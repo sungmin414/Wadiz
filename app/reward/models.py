@@ -20,6 +20,10 @@ class Product(models.Model):
 
     product_end_time = models.CharField(max_length=100)
 
+    product_is_funding = models.BooleanField(default=True)
+
+    product_video_url = models.CharField(max_length=100)
+
     product_cur_amount = models.PositiveIntegerField(blank=True, default=0)
 
     product_total_amount = models.PositiveIntegerField(default=0)

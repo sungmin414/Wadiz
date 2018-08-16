@@ -2,7 +2,6 @@ from rest_framework import generics, mixins, filters
 from ..models import Product, Reward
 from ..serializer import ProductSerializer, RewardSerializer, ProductDetailSerializer, ProductFundingSerializer
 from utils.paginations import ProductListPagination
-from django.db.models import Q
 
 
 class ProductList(generics.ListAPIView):
@@ -15,11 +14,16 @@ class ProductCategoryList(generics.ListAPIView):
     serializer_class = ProductSerializer
     pagination_class = ProductListPagination
 
+    filter_backends = (filters.OrderingFilter,)
+    ordering_fields = ('product_interested_count', 'product_cur_amount', 'product_end_time')
+
     def get_queryset(self):
-        category = self.request.query_params.get('category', None)
-        product_name = self.request.query_params.get('product_name', None)
-        # ordering = self.
-        return Product.objects.filter(product_type__contains=category, product_name__contains=product_name)
+        category = self.request.query_params.get('category', '')
+        product_name = self.request.query_params.get('product_name', '')
+        is_funding = self.request.query_params.get('is_funding', True)
+
+        return Product.objects.filter(product_type__contains=category, product_name__contains=product_name,
+                                      product_is_funding=is_funding)
 
 
 class ProductFundingList(mixins.RetrieveModelMixin, generics.GenericAPIView):

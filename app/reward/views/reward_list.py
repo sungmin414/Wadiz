@@ -5,6 +5,7 @@ from selenium import webdriver
 import re
 import time
 import requests
+import datetime
 
 from reward.models import Reward, Product
 
@@ -18,15 +19,14 @@ def reward_list(request):
     # WadizCrawler.start()
     print('리워드 실행')
 
-    # WadizCrawler.create_detail_html()
     if Product.objects.count() < 10:
         WadizCrawler.get_product_list()
         WadizCrawler.get_reward_list()
 
-    product = Product.objects.all()
+    products = Product.objects.all()
 
     context = {
-        'products': product
+        'products': products
     }
 
     return render(request, 'production/product-list.html', context)
@@ -44,6 +44,8 @@ class WadizCrawler:
         'product_total_amount': 0,
         'product_interested_count': 0,
         'product_description': '',
+        'product_is_funding': True,
+        'product_video_url': '',
     }
 
     product_list = []
@@ -122,6 +124,29 @@ class WadizCrawler:
             # 현재까지 좋아요를 받은 개수
             interested_count = soup.select_one('em.cnt-like').get_text(strip=True)
 
+            # 현재 날짜를 저장
+            today = datetime.datetime.now()
+
+            # 크롤링한 펀딩 마감일자를 연월일 형식으로 변환
+            y, m, d = re.findall('(\d...).(\d.).(\d.)', end_time)[0]
+
+            # 펀딩마감 일자에서 오늘 날자를 연산하여 현재 펀딩중인지 아닌지를 판단
+            remain_time = datetime.datetime(int(y), int(m), int(d)) - today
+
+            if remain_time.days > -1:
+                product_is_funding = True
+
+            else:
+                product_is_funding = False
+
+            is_video = soup.select_one('div.video-wrap div:nth-of-type(1)')
+
+            if is_video is not None:
+                product_video_url = soup.select_one('div.video-wrap div:nth-of-type(1)').get('data-video-url')
+
+            else:
+                product_video_url = ''
+
             cls.product_dict['product_name'] = product_name
             cls.product_dict['product_type'] = product_type
             cls.product_dict['product_company_name'] = company_name
@@ -132,6 +157,8 @@ class WadizCrawler:
             cls.product_dict['product_total_amount'] = int(total_amount)
             cls.product_dict['product_interested_count'] = int(interested_count)
             cls.product_dict['product_description'] = str(description)
+            cls.product_dict['product_is_funding'] = product_is_funding
+            cls.product_dict['product_video_url'] = product_video_url
             cls.product_no.append(detail_page_id)
             cls.product_list.append(Product.objects.create(**cls.product_dict))
 
@@ -182,16 +209,6 @@ class WadizCrawler:
                     reward_on_sale=reward_on_sale,
                     product=product,
                 )
-
-                # print('가격: ', reward_price)
-                # print('상품이름: ', reward_name)
-                # print('배송비: ', reward_shipping_charge)
-                # print('리워드 배송일: ', reward_expecting_departure_date)
-                # print('총 개수:', reward_total)
-                # print('펀딩된 수량: ', reward_sold_count)
-                # print('펀딩 가능 여부: ', reward_on_sale)
-                #
-                # print('')
 
     @classmethod
     def create_detail_html(cls):
