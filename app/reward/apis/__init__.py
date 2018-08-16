@@ -15,7 +15,7 @@ class ProductCategoryList(generics.ListAPIView):
     pagination_class = ProductListPagination
 
     filter_backends = (filters.OrderingFilter,)
-    ordering_fields = ('product_interested_count', 'product_cur_amount', 'product_end_time')
+    ordering_fields = ('product_interested_count', 'product_cur_amount', 'product_start_time', 'product_end_time')
 
     def get_queryset(self):
         category = self.request.query_params.get('category', '')
@@ -37,22 +37,6 @@ class ProductFundingList(mixins.RetrieveModelMixin, generics.GenericAPIView):
 class RewardList(generics.ListAPIView):
     queryset = Reward.objects.all()
     serializer_class = RewardSerializer
-
-
-# 쿼리 매개 변수에 대한 필터링
-class ProductFilterList(generics.ListAPIView):
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ('product_name',)
-
-
-# 오름차순 내림차순 필터링
-class ProductOrderingList(generics.ListAPIView):
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-    filter_backends = (filters.OrderingFilter,)
-    ordering_fields = ('product_interested_count', 'product_cur_amount', 'product_end_time')
 
 
 class ProductDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
