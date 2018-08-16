@@ -14,6 +14,8 @@ class Product(models.Model):
 
     product_img = models.CharField(max_length=200)
 
+    product_detail_img = models.CharField(max_length=200)
+
     product_interested_count = models.PositiveIntegerField(blank=True, default=0)
 
     product_start_time = models.CharField(max_length=100)

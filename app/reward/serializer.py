@@ -31,6 +31,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'product_type',
             'product_company_name',
             'product_img',
+            'product_detail_img',
             'product_interested_count',
             'product_start_time',
             'product_end_time',

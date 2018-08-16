@@ -38,6 +38,7 @@ class WadizCrawler:
         'product_type': '',
         'product_company_name': '',
         'product_img': '',
+        'product_detail_img': '',
         'product_start_time': '',
         'product_end_time': '',
         'product_cur_amount': 0,
@@ -147,10 +148,21 @@ class WadizCrawler:
             else:
                 product_video_url = ''
 
+            is_detail_img_url = soup.select_one('div.img-responsive')
+
+            if is_detail_img_url is not None:
+                product_detail_img = ''.join(
+                    re.findall("url\('(\S*)'\)", soup.select_one('div.img-responsive').get('style')))
+
+            else:
+                product_detail_img = ''.join(
+                    re.findall('url\((\S*)\)', soup.select_one('div.video-cover').get('style')))
+
             cls.product_dict['product_name'] = product_name
             cls.product_dict['product_type'] = product_type
             cls.product_dict['product_company_name'] = company_name
             cls.product_dict['product_img'] = product_img
+            cls.product_dict['product_detail_img'] = product_detail_img
             cls.product_dict['product_start_time'] = start_time
             cls.product_dict['product_end_time'] = end_time
             cls.product_dict['product_cur_amount'] = int(cur_amount)
