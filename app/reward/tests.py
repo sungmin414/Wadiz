@@ -3,6 +3,7 @@ from rest_framework.test import APITestCase
 import json
 
 from reward.models import Reward, Product
+from members.models import User, Funding
 
 
 def get_dummy_reward():
@@ -65,3 +66,7 @@ class RewardListTest(APITestCase):
     def test_product_list(self):
         for product in get_dummy_product():
             print(product)
+
+    def test_funding_list(self):
+
+        get_dummy_product()
